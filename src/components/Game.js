@@ -7,7 +7,8 @@ export class Game extends React.Component {
     this.state = {
       history: [{ squares: Array(9).fill(null), location: null }],
       xIsNext: true,
-      stepNumber: 0
+      stepNumber: 0,
+      displayMovesDescending: false
     };
   }
 
@@ -40,8 +41,15 @@ export class Game extends React.Component {
     });
   }
 
+  toggleDisplayMoves() {
+    const { displayMovesDescending } = this.state;
+    this.setState({
+      displayMovesDescending: !displayMovesDescending
+    });
+  }
+
   render() {
-    const { history, xIsNext, stepNumber } = this.state;
+    const { history, xIsNext, stepNumber, displayMovesDescending } = this.state;
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
 
@@ -81,7 +89,12 @@ export class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol className={displayMovesDescending ? "descending" : ""}>
+            {moves}
+          </ol>
+          <button onClick={() => this.toggleDisplayMoves()}>
+            Reverse order
+          </button>
         </div>
       </div>
     );
