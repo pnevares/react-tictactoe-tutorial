@@ -15,8 +15,14 @@ export class Board extends React.Component {
   }
 
   renderSquare(i) {
-    const { squares, onClick } = this.props;
-    return <Square value={squares[i]} onClick={() => onClick(i)} />;
+    const { squares, onClick, winningLine } = this.props;
+    return (
+      <Square
+        winner={winningLine && winningLine.includes(i)}
+        value={squares[i]}
+        onClick={() => onClick(i)}
+      />
+    );
   }
 
   render() {
