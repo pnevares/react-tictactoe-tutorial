@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export function Square({ value, onClick, winner }) {
   return (
@@ -7,3 +8,9 @@ export function Square({ value, onClick, winner }) {
     </button>
   );
 }
+
+Square.propTypes = {
+  value: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  winner: PropTypes.bool
+};
