@@ -1,44 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
+import Square from "../containers/SquareContainer";
 
-import { Square } from "./Square";
-
-export class Board extends React.Component {
-  renderGrid() {
+export default function Board() {
+  function renderGrid() {
     return [0, 1, 2].map((row, index) => {
       return (
         <div key={index} className="board-row">
-          {this.renderRow(row)}
+          {renderRow(row)}
         </div>
       );
     });
   }
 
-  renderRow(row) {
+  function renderRow(row) {
     return [0, 1, 2].map(column => {
-      return this.renderSquare(row * 3 + column);
+      return renderSquare(row * 3 + column);
     });
   }
 
-  renderSquare(i) {
-    const { squares, onClick, winningLine } = this.props;
-    return (
-      <Square
-        key={i}
-        winner={winningLine && winningLine.includes(i)}
-        value={squares[i]}
-        onClick={() => onClick(i)}
-      />
-    );
+  function renderSquare(i) {
+    return <Square key={i} index={i} />;
   }
 
-  render() {
-    return <div>{this.renderGrid()}</div>;
-  }
+  return <div>{renderGrid()}</div>;
 }
-
-Board.propTypes = {
-  squares: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClick: PropTypes.func.isRequired,
-  winningLine: PropTypes.arrayOf(PropTypes.number)
-};

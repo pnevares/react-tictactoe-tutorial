@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export function Square({ value, onClick, winner }) {
+export default function Square({ value, onClick, winner }) {
   return (
     <button className={`square ${winner ? "winner" : ""}`} onClick={onClick}>
       {value}
