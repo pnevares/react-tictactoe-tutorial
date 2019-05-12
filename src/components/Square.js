@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export function Square({ value, onClick, winner }) {
+export default function Square({ value, onClick, winner }) {
   return (
     <button className={`square ${winner ? "winner" : ""}`} onClick={onClick}>
       {value}
@@ -12,5 +12,5 @@ export function Square({ value, onClick, winner }) {
 Square.propTypes = {
   value: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-  winner: PropTypes.bool
+  winner: PropTypes.bool.isRequired
 };
