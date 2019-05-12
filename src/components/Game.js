@@ -41,7 +41,12 @@ export default function Game({
 }
 
 Game.propTypes = {
-  history: PropTypes.arrayOf().isRequired,
+  history: PropTypes.arrayOf(
+    PropTypes.shape({
+      squares: PropTypes.arrayOf(PropTypes.string),
+      location: PropTypes.string
+    })
+  ).isRequired,
   stepNumber: PropTypes.number.isRequired,
   displayMovesDescending: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,

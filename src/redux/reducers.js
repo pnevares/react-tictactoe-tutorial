@@ -17,7 +17,8 @@ function game(
     history: [{ squares: Array(9).fill(null), location: null }],
     xIsNext: true,
     stepNumber: 0,
-    status: "Next player: X"
+    status: "Next player: X",
+    winningLine: null
   },
   action
 ) {
@@ -32,7 +33,7 @@ function game(
       if (calculateWinner(newSquares) || newSquares[index]) {
         return state;
       }
-      newSquares[action.index] = xIsNext ? "X" : "O";
+      newSquares[index] = xIsNext ? "X" : "O";
 
       const winner = calculateWinner(newSquares);
       const status = calculateStatus(winner, stepNumber + 1, !xIsNext);
@@ -47,7 +48,8 @@ function game(
         ]),
         xIsNext: !xIsNext,
         stepNumber: newHistory.length,
-        status
+        status,
+        winningLine: winner ? winner.line : null
       };
     }
     case "JUMP_TO_MOVE": {
@@ -55,12 +57,14 @@ function game(
       const { history } = state;
       const xIsNext = step % 2 === 0;
       const winner = calculateWinner(history[step].squares);
+      const status = calculateStatus(winner, step, xIsNext);
 
       return {
         ...state,
         xIsNext,
         stepNumber: step,
-        status: calculateStatus(winner, step, xIsNext)
+        status,
+        winningLine: winner ? winner.line : null
       };
     }
     default:

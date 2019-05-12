@@ -3,12 +3,13 @@ import { claimSquare } from "../redux/actions";
 import Square from "../components/Square";
 
 const mapStateToProps = (state, ownProps) => {
-  const { history, stepNumber } = state.game;
+  const { history, stepNumber, winningLine } = state.game;
+  const { index } = ownProps;
   const current = history[stepNumber];
 
   return {
-    value: current.squares[ownProps.index],
-    winner: ownProps.winner
+    value: current.squares[index],
+    winner: winningLine !== null && winningLine.includes(index)
   };
 };
 
