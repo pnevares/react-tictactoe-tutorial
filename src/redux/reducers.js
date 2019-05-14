@@ -1,7 +1,41 @@
 import { combineReducers } from "redux";
 
 import calculateWinner from "../calculateWinner";
-import calculateStatus from "../calculateStatus";
+import calculateRound from "../calculateRound";
+
+function claimSquare(state, action) {
+  const { index } = action;
+  const { history, xIsNext, stepNumber } = state;
+  const newHistory = history.slice(0, stepNumber + 1);
+  const squares = newHistory[newHistory.length - 1].squares.slice();
+
+  // return if the game is over or if the space is taken
+  if (calculateWinner(squares) || squares[index]) {
+    return state;
+  }
+  squares[index] = xIsNext ? "X" : "O";
+
+  return {
+    ...state,
+    ...calculateRound(squares, stepNumber + 1),
+    history: newHistory.concat([
+      {
+        squares,
+        location: `(${(index % 3) + 1},${Math.floor(index / 3) + 1})`
+      }
+    ])
+  };
+}
+
+function jumpTo(state, action) {
+  const { step } = action;
+  const { squares } = state.history[step];
+
+  return {
+    ...state,
+    ...calculateRound(squares, step)
+  };
+}
 
 function displayMovesDescending(state = false, action) {
   switch (action.type) {
@@ -23,50 +57,10 @@ function game(
   action
 ) {
   switch (action.type) {
-    case "CLAIM_SQUARE": {
-      const { index } = action;
-      const { history, xIsNext, stepNumber } = state;
-      const newHistory = history.slice(0, stepNumber + 1);
-      const current = newHistory[newHistory.length - 1];
-      const newSquares = current.squares.slice();
-
-      if (calculateWinner(newSquares) || newSquares[index]) {
-        return state;
-      }
-      newSquares[index] = xIsNext ? "X" : "O";
-
-      const winner = calculateWinner(newSquares);
-      const status = calculateStatus(winner, stepNumber + 1, !xIsNext);
-
-      return {
-        ...state,
-        history: newHistory.concat([
-          {
-            squares: newSquares,
-            location: `(${(index % 3) + 1},${Math.floor(index / 3) + 1})`
-          }
-        ]),
-        xIsNext: !xIsNext,
-        stepNumber: newHistory.length,
-        status,
-        winningLine: winner ? winner.line : null
-      };
-    }
-    case "JUMP_TO_MOVE": {
-      const { step } = action;
-      const { history } = state;
-      const xIsNext = step % 2 === 0;
-      const winner = calculateWinner(history[step].squares);
-      const status = calculateStatus(winner, step, xIsNext);
-
-      return {
-        ...state,
-        xIsNext,
-        stepNumber: step,
-        status,
-        winningLine: winner ? winner.line : null
-      };
-    }
+    case "CLAIM_SQUARE":
+      return claimSquare(state, action);
+    case "JUMP_TO":
+      return jumpTo(state, action);
     default:
       return state;
   }

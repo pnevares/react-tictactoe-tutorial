@@ -7,5 +7,5 @@ export function toggleDisplayMoves() {
 }
 
 export function jumpTo(step) {
-  return { type: "JUMP_TO_MOVE", step };
+  return { type: "JUMP_TO", step };
 }
